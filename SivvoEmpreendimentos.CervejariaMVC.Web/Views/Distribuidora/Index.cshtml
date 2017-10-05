@@ -1,0 +1,50 @@
+﻿@model IList<SivvoEmpreendimentos.CervejariaMVC.Web.Models.Distribuidora>
+@{
+    ViewBag.Title = "Distribuidoras";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="cadastro">
+    <section id="lista-head">
+        <h2>@ViewBag.Title</h2>
+        <hr />
+    </section>
+    <section id="lista-body">
+        <div id="grid-head" class="row">
+            <div class="col-md-12 text-right">
+                <a id="btn-add" class="btn btn-success" role="button" data-toggle="modal" data-target="#nova-fabrica" data-focus="true"><i class="glyphicon glyphicon-plus"></i> Incluir</a>
+            </div>
+            <br />
+        </div>
+        <div id="grid-body" class="row">
+            <div class="col-md-12">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <td>Descricao</td>
+                            <td>CNPJ</td>
+                            <td>Telefone</td>
+                            <td>Email</td>
+                            <td>Fabrica</td>
+                            <td align="center">Ação</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr id="linha-@item.Id">
+                                <td>@item.Descricao</td>
+                                <td>@item.Cnpj</td>
+                                <td>@item.Telefone</td>
+                                <td>@item.Email</td>
+                                <td>@item.Fabrica.Descricao</td>
+                                <td align="center"><a href="@Url.Action("Gerir", "Distribuidora", new { id = item.Id })" class="btn btn-primary" role="button"><i class="glyphicon glyphicon-edit"></i></a> <a class="btn btn-danger" data-id="@item.Id" role="button"><i class="glyphicon glyphicon-trash"></i></a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</div>
+

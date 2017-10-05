@@ -1,0 +1,66 @@
+﻿@model SivvoEmpreendimentos.CervejariaMVC.Web.Models.Distribuidora
+
+@{
+    ViewBag.Title = "Distribuidora";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div id="cadastro" class="row">
+    <div class="col-md-12">
+        <section id="cadastro-head">
+            <h2>Distribuidora</h2>
+            <hr />
+        </section>
+        <section id="cadastro-body">
+            @using (Html.BeginForm("Salvar", "Distribuidora", FormMethod.Post))
+            {
+                <fieldset>
+                    <div class="col-md-8 col-md-offset-2">
+                        @Html.Hidden("Id", null, new { @class = "form-control" })
+                        <div class="form-group">
+                            @Html.Label("Descricao", "Descrição", new { @class = "col-md-3 control-label" })
+                            <div class="col-md-12">
+                                @Html.TextBox("Descricao", null, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Cnpj", "CNPJ", new { @class = "col-md-3 control-label" })
+                            <div class="col-md-12">
+                                @Html.TextBox("Cnpj", null, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Telefone", "Telefone", new { @class = "col-md-3 control-label" })
+                            <div class="col-md-12">
+                                @Html.TextBox("Telefone", null, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Email", "Email", new { @class = "col-md-3 control-label" })
+                            <div class="col-md-12">
+                                @Html.TextBox("Email", null, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Fabrica", "Fabrica", new { @class = "col-md-3 control-label" })
+                            <div class="col-md-12">
+                                <select name="FabricaId" class="form-control">
+                                    @foreach (var item in ViewBag.Fabricas)
+                                    {
+                                        <option value="@item.Id">@item.Descricao</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-success" type="submit">Salvar</button>
+                        </div>
+                    </div>
+                </fieldset>
+            }
+        </section>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+

@@ -1,0 +1,190 @@
+﻿@model IList<SivvoEmpreendimentos.CervejariaMVC.Web.Models.Fabrica>
+
+@{
+    ViewBag.Title = "Fabricas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div id="cadastro">
+    <section id="lista-head">
+        <h2>@ViewBag.Title</h2>
+        <hr />
+    </section>
+    <section id="lista-body">
+        <div id="grid-head" class="row">
+            <div class="col-md-12 text-right">
+                <a id="btn-add" class="btn btn-success" role="button" data-toggle="modal" data-target="#nova-fabrica" data-focus="true"><i class="glyphicon glyphicon-plus"></i> Incluir</a>
+            </div>
+            <br />
+        </div>
+        <div id="grid-body" class="row">
+            <div class="col-md-12">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <td>Descricao</td>
+                            <td>Endereco</td>
+                            <td>CNPJ</td>
+                            <td>Telefone</td>
+                            <td>Cidade</td>
+                            <td>Estado</td>
+                            <td align="center">Ação</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr id="linha-@item.Id">
+                                <td>@item.Descricao</td>
+                                <td>@item.Endereco</td>
+                                <td>@item.Cnpj</td>
+                                <td>@item.Telefone</td>
+                                <td>@item.Cidade</td>
+                                <td>@item.Estado</td>
+                                <td align="center"><a class="btn btn-primary" role="button" data-id="@item.Id" data-toggle="modal" data-target="#nova-fabrica" data-focus="true"><i class="glyphicon glyphicon-edit"></i></a> <a class="btn btn-danger" data-id="@item.Id" role="button"><i class="glyphicon glyphicon-trash"></i></a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</div>
+<div id="nova-fabrica" class="modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Nova Fabrica</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    @Html.Hidden("txt-id", null, new { @class = "form-control" })
+                    <div class="form-group">
+                        @Html.Label("txt-descricao", "Descricao", new { @class = "col-md-3 control-label" })
+                        <div class="col-md-12">
+                            @Html.TextBox("txt-descricao", null, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.Label("txt-endereco", "Endereço", new { @class = "col-md-3 control-label" })
+                        <div class="col-md-12">
+                            @Html.TextBox("txt-endereco", null, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.Label("txt-cnpj", "CNPJ", new { @class = "col-md-3 control-label" })
+                        <div class="col-md-12">
+                            @Html.TextBox("txt-cnpj", null, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.Label("txt-telefone", "Telefone", new { @class = "col-md-3 control-label" })
+                        <div class="col-md-12">
+                            @Html.TextBox("txt-telefone", null, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.Label("txt-cidade", "Cidade", new { @class = "col-md-3 control-label" })
+                        <div class="col-md-12">
+                            @Html.TextBox("txt-cidade", null, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.Label("txt-estado", "Estado", new { @class = "col-md-3 control-label" })
+                        <div class="col-md-12">
+                            <select id="txt-estado" class="form-control">
+                            @foreach (var item in ViewBag.Estados)
+                            {
+                                <option value="@item.Key">@item.Value</option>
+                            }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a id="btn-sair" class="btn btn-secondary" role="button" data-dismiss="modal"><i class="glyphicon glyphicon-remove"></i> Sair</a>
+                <a id="btn-salvar" class="btn btn-primary" role="button"><i class="glyphicon glyphicon-ok"></i> Salvar</a>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $("#btn-add").click(
+            function () {
+                $("#txt-descricao").val("");
+                $("#txt-endereco").val("");
+                $("#txt-cnpj").val("");
+                $("#txt-telefone").val("");
+                $("#txt-cidade").val("");
+                $("#txt-estado").val("");
+
+                $('#modal-cadastro').modal('toggle');
+            });
+        $(".btn-primary").click(
+            function () {
+                var id = $(this).attr("data-id");
+                $.post('@Url.Action("ObterFabricaJson", "Fabrica")', { 'id': id }, function (response) {
+                    if (response) {
+                        //console.log(response);
+                        $("#txt-id").val(response.Id);
+                        $("#txt-descricao").val(response.Descricao);
+                        $("#txt-endereco").val(response.Endereco);
+                        $("#txt-cnpj").val(response.Cnpj);
+                        $("#txt-telefone").val(response.Telefone);
+                        $("#txt-cidade").val(response.Cidade);
+                        $("#txt-estado").val(response.Estado);
+
+                        $('#modal-cadastro').modal('toggle');
+                    }
+                });
+            });
+        $(".btn-danger").click(
+            function () {
+                var id = $(this).attr("data-id");
+                bootbox.confirm({
+                    message: "Deseja Realmente deletar essa fabrica?",
+                    buttons: {
+                        confirm: {
+                            label: 'Sim',
+                            className: 'btn-success'
+                        },
+                        cancel: {
+                            label: 'Não',
+                            className: 'btn-danger'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            $.post('@Url.Action("DeletarFabrica", "Fabrica")', { 'id': id }, function (response) {
+                                if (response) {
+                                    $("#linha-" + id).remove();
+                                }
+                            });
+                        }
+                    }
+                });
+            });
+        $("#btn-salvar").click(
+            function () {
+                $.post(
+                    '@Url.Action("SalvarFabrica", "Fabrica")',
+                    {
+                        'Id': $("#txt-id").val(),
+                        'Descricao': $("#txt-descricao").val(),
+                        'Endereco': $("#txt-endereco").val(),
+                        'Cnpj': $("#txt-cnpj").val(),
+                        'Telefone': $("#txt-telefone").val(),
+                        'Cidade': $("#txt-cidade").val(),
+                        'Estado': $("#txt-estado").val()
+                    },
+                    function (response) {
+                        window.location = "@Url.Action("Index", "Fabrica")";
+                    });
+        });
+    </script>
+}
